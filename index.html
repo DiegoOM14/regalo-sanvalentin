@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Historia ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d4af37; /* Dorado */
+            --bg-dark: #0a0a0a;
+            --glass: rgba(20, 20, 20, 0.9);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            /* Fondo elegante */
+            background-image: linear-gradient(to bottom, #1a0b1c, #000000);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 15px;
+            overflow-x: hidden;
+        }
+
+        /* Contenedor principal */
+        .container {
+            background: var(--glass);
+            border: 1px solid rgba(212, 175, 55, 0.2); /* Borde dorado sutil */
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 600px; /* Hice el contenedor un poco más ancho */
+            width: 100%;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.1);
+            position: relative;
+            transition: opacity 0.5s ease;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            line-height: 1.2;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            color: #e0e0e0;
+        }
+
+        /* INPUTS Y BOTONES */
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: 1px solid #555;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1.1rem;
+            text-align: center;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input:focus { border-color: var(--primary); }
+
+        .btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #d4af37, #aa862e);
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+            width: 100%; /* Botón ancho en móviles */
+        }
+        
+        .btn:hover { 
+            transform: scale(1.02); 
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+        }
+
+        /* --- ESTILOS PARA LAS 3 FOTOS (NIVEL 4) --- */
+        .image-grid {
+            display: flex;
+            flex-direction: column; /* En celular una debajo de otra para verlas bien */
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        /* En pantallas más grandes (PC), las ponemos una al lado de otra */
+        @media (min-width: 500px) {
+            .image-grid {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+
+        .image-option {
+            width: 100%; /* Ocupa todo el ancho disponible */
+            max-width: 200px; /* Pero no te pases de grande en PC */
+            height: 200px; /* Cuadradas y grandes */
+            object-fit: cover;
+            border-radius: 15px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            margin: 0 auto;
+        }
+        .image-option:hover { 
+            transform: scale(1.05); 
+            border-color: var(--primary); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        /* --- NUEVOS ESTILOS PARA EL ROMPECABEZAS (NIVEL HARD) --- */
+        .puzzle-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px; /* Ancho máximo para que no sea enorme */
+            aspect-ratio: 1 / 1; /* Mantiene una proporción cuadrada */
+            margin: 0 auto 20px auto;
+            /* overflow: hidden; Si quieres que las piezas no se salgan del cuadro, descomenta esto */
+        }
+
+        .puzzle-piece {
+            position: absolute;
+            width: 33.333%; /* Un tercio del ancho */
+            height: 33.333%; /* Un tercio de la altura */
+            background-size: 300% 300%; /* Escala la imagen al triple del tamaño de la pieza */
+            /* La magia: transición suave de 3 segundos para armarse y enfocar */
+            transition: all 3s ease-in-out; 
+            /* CAMBIO AQUÍ: Menos borroso (antes 15px) */
+            filter: blur(8px); 
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+            border-radius: 5px;
+            background-repeat: no-repeat;
+        }
+
+        /* Posiciones correctas de las 9 piezas (Grid 3x3 con porcentajes) */
+        .p0 { top: 0%; left: 0%; background-position: 0% 0%; }
+        .p1 { top: 0%; left: 33.333%; background-position: 50% 0%; }
+        .p2 { top: 0%; left: 66.666%; background-position: 100% 0%; }
+        .p3 { top: 33.333%; left: 0%; background-position: 0% 50%; }
+        .p4 { top: 33.333%; left: 33.333%; background-position: 50% 50%; }
+        .p5 { top: 33.333%; left: 66.666%; background-position: 100% 50%; }
+        .p6 { top: 66.666%; left: 0%; background-position: 0% 100%; }
+        .p7 { top: 66.666%; left: 33.333%; background-position: 50% 100%; }
+        .p8 { top: 66.666%; left: 66.666%; background-position: 100% 100%; }
+
+        /* Estado cuando se revela: Se arma y se quita el blur */
+        .puzzle-container.revealed .puzzle-piece {
+            filter: blur(0); /* Se enfoca */
+            transform: translate(0, 0) rotate(0deg) !important; /* Se va a su lugar origen */
+            border-radius: 0; /* Se quitan los bordes redondeados para que embonen */
+            box-shadow: none;
+        }
+
+        /* PISTAS */
+        .hint-btn {
+            background: none;
+            border: none;
+            color: #888;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+        .hint-text {
+            color: #d4af37;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: none;
+            font-style: italic;
+        }
+
+        /* FINAL DEL COLLAR */
+        .necklace-reveal {
+            animation: glow 3s infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #fff, 0 0 20px #d4af37; }
+            to { text-shadow: 0 0 20px #fff, 0 0 40px #d4af37; }
+        }
+
+        /* UTILIDADES */
+        .shake { animation: shake 0.5s; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container" id="game-container">
+        </div>
+
+    <script>
+        // --- TUS NIVELES ---
+        const levels = [
+            // --- INTRO ---
+            {
+                type: "intro",
+                title: "Nuestra Historia ❤️",
+                text: "He preparado un viaje por nuestros recuerdos para este San Valentín.<br>Hay acertijos fáciles, medios y difíciles.<br><br>¿Lista para empezar?",
+                button: "Comenzar Aventura"
+            },
+            
+            // --- FÁCIL ---
+            { type: "riddle", title: "1. El Comienzo", text: "¿Cuándo nos conocimos? (Día Mes Año)", answer: "3 de julio 2021", hint: "Verano del 21..." },
+            { type: "riddle", title: "2. Coordenadas", text: "¿Donde nos conocimos? Escribe las coordenadas", answer: ["20.388468537095502, -99.95075853896131", "20.388468, -99.950758"], hint: "Solo copia y pega." },
+            { type: "riddle", title: "3. Fecha Especial", text: "¿Qué día salimos oficialmente por primera vez?", answer: "14 de diciembre", hint: "Cerca de Navidad." },
+            
+            // FOTOS LARGAS
+            {
+                type: "image-select",
+                title: "4. Primera Foto",
+                text: "Selecciona nuestra PRIMERA foto juntos.",
+                images: [
+                    { src: "foto1.jpg", correct: false }, 
+                    { src: "foto2.jpg", correct: true }, // ESTA ES LA CORRECTA
+                    { src: "foto3.jpg", correct: false }
+                ],
+                hint: "Que pena nos dio JAJA"
+            },
+            { type: "riddle", title: "5. Melodía", text: "¿Cuál fue la primera canción que te dediqué?", answer: "solo por vos", hint: "Tres palabras. ⚡" },
+
+            // --- TRANSICIÓN A MEDIO ---
+            {
+                type: "transition",
+                title: "¡Nivel Fácil Superado! 🥳",
+                text: "Tienes buena memoria... Pero ahora vamos a subir un poco la dificultad. <br>¿Estás lista para el Nivel Medio?",
+                button: "Venga, dale"
+            },
+
+            // --- MEDIO ---
+            { type: "riddle", title: "6. La Serie", text: "¿En qué capítulo vamos de la serie que estamos viendo? (Número)", answer: "3", hint: "Número pequeño." },
+            { type: "riddle", title: "7. Suma Segura", text: "Suma: (Tu contraseña) + (Mi contraseña).", answer: "292138", hint: "Calculadora." },
+            { type: "riddle", title: "8. Misión Cocina", text: "Ve al refri, busca bajo el imán grande. Escribe la palabra.", answer: "brillo", hint: "Corre a la cocina." },
+            { type: "riddle", title: "9. Gorros", text: "¿De qué eran nuestros gorros iguales?", answer: "akatsuki", hint: "Nubes rojas." },
+
+            // --- TRANSICIÓN A DIFÍCIL ---
+            {
+                type: "transition",
+                title: "Wow... 😯",
+                text: "Lo estás haciendo increíble. <br>Ahora respira hondo, porque viene el <b>Nivel Difícil</b>. <br>Aquí tendrás que investigar de verdad.",
+                button: "Acepto el reto"
+            },
+
+            // --- HARD ---
+            {
+                type: "blur-riddle", // TIPO NUEVO PARA LA FOTO BORROSA
+                title: "10. Visión Borrosa",
+                text: "Mira esta foto. Está desordenada y borrosa.<br>¿Dónde se tomó?",
+                image: "pavorreales.jpg", // USA LA FOTO NÍTIDA, EL CÓDIGO LA BORRA
+                answer: "la casa de los pavorreales",
+                hint: "Tiene nombre de ave exótica."
+            },
+            { type: "riddle", title: "11. Las Tazas", text: "Busca debajo de una de esas tazas que compramos con ilusión para una fecha especial, pero que nunca usamos como planeamos.<br>Escribe la palabra que está debajo.", answer: "destino", hint: "Levanta la taza." },
+            { type: "riddle", title: "12. WhatsApp", text: "¿Qué signfica lo que tengo en mi (About) de WhatsApp?", answer: "a", hint: "Morse" },
+            { type: "riddle", title: "13. Cuestión de Tiempo", text: "Netflix, película 'Cuestión de Tiempo', minuto 43:15.<br>¿Color del vestido de ella?", answer: "rojo", hint: "Pasión." },
+
+            // --- ACERTIJO FINAL EXTRA ---
+            {
+                type: "riddle",
+                title: "Último paso...",
+                text: "Para revelar tu regalo, responde esto:<br>Es brillante, se lleva cerca del corazón y brilla tanto como tú.<br>¿Qué es?",
+                answer: ["collar", "un collar", "el collar"],
+                hint: "Es una joya."
+            },
+
+            // --- PANTALLA DEL REGALO ---
+            {
+                type: "final-gift",
+                title: "Para ti, mi vida 💎",
+                text: "Lo has logrado. Gracias por jugar conmigo.<br><br>Quería regalarte algo que brillara tanto como tus ojos cuando sonríes.<br><br><b>Busca detras de tu espejo que nunca usaste JAJA. Ahí te espera tu Swarovski.</b><br><br>Te amo.",
+                button: "Te amo ❤️"
+            }
+        ];
+
+        // --- LÓGICA DEL SISTEMA ---
+        let currentLevel = 0;
+        const container = document.getElementById('game-container');
+        const audio = document.getElementById('bg-music');
+
+        function loadLevel() {
+            const level = levels[currentLevel];
+            container.style.opacity = 0;
+
+            setTimeout(() => {
+                container.innerHTML = ''; // Limpiar
+
+                // Crear Título
+                const h2 = document.createElement('h2');
+                h2.textContent = level.title;
+                if(level.type === 'final-gift') h2.className = 'necklace-reveal';
+                container.appendChild(h2);
+
+                // --- Lógica Foto ROMPECABEZAS (Nivel 10) ---
+                if (level.type === 'blur-riddle') {
+                    const pzlCont = document.createElement('div');
+                    pzlCont.className = 'puzzle-container';
+                    pzlCont.id = 'puzzle-cont';
+
+                    // Creamos 9 piezas (Grid 3x3)
+                    for(let i=0; i<9; i++) {
+                        const piece = document.createElement('div');
+                        piece.className = `puzzle-piece p${i}`;
+                        piece.style.backgroundImage = `url('${level.image}')`;
+
+                        // CAMBIO AQUÍ: Aleatorizar posición inicial (Desordenar MENOS)
+                        // Ahora el rango es mucho menor (entre -15% y +15% aprox)
+                        const randomX = Math.floor(Math.random() * 30 - 15); 
+                        const randomY = Math.floor(Math.random() * 30 - 15);
+                        // Rotación más sutil (-15 a 15 grados)
+                        const randomRot = Math.floor(Math.random() * 30 - 15); 
+                        
+                        // Aplicamos el desorden inicial
+                        piece.style.transform = `translate(${randomX}%, ${randomY}%) rotate(${randomRot}deg)`;
+                        
+                        pzlCont.appendChild(piece);
+                    }
+                    container.appendChild(pzlCont);
+                }
+
+                // Crear Texto
+                const p = document.createElement('p');
+                p.innerHTML = level.text;
+                container.appendChild(p);
+
+                // Lógica Fotos Largas (Nivel 4)
+                if (level.type === 'image-select') {
+                    const grid = document.createElement('div');
+                    grid.className = 'image-grid';
+                    level.images.forEach(imgInfo => {
+                        const img = document.createElement('img');
+                        img.src = imgInfo.src;
+                        img.className = 'image-option';
+                        img.onclick = () => {
+                            if(imgInfo.correct) nextLevel();
+                            else alert("Esa no es... intenta de nuevo ❤️");
+                        };
+                        grid.appendChild(img);
+                    });
+                    container.appendChild(grid);
+                }
+
+                // Inputs de Texto (Acertijos normales y Rompecabezas)
+                if (level.type === 'riddle' || level.type === 'blur-riddle') {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.id = 'ans';
+                    input.placeholder = 'Respuesta...';
+                    input.autocomplete = 'off';
+                    // Enter para enviar
+                    input.addEventListener("keypress", (e) => { if(e.key === "Enter") checkAnswer(); });
+                    container.appendChild(input);
+
+                    const btn = document.createElement('button');
+                    btn.className = 'btn';
+                    btn.textContent = 'Enviar';
+                    btn.onclick = checkAnswer;
+                    container.appendChild(btn);
+
+                    // Pista
+                    if (level.hint) {
+                        const hintBtn = document.createElement('button');
+                        hintBtn.className = 'hint-btn';
+                        hintBtn.textContent = 'Pedir Pista';
+                        const hintTxt = document.createElement('div');
+                        hintTxt.className = 'hint-text';
+                        hintTxt.textContent = level.hint;
+                        hintBtn.onclick = () => { hintTxt.style.display = 'block'; hintBtn.style.display = 'none'; };
+                        container.appendChild(hintBtn);
+                        container.appendChild(hintTxt);
+                    }
+                }
+
+                // Botones de Transición, Intro y Final
+                if (level.type === 'intro' || level.type === 'transition' || level.type === 'final-gift') {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn';
+                    btn.textContent = level.button;
+                    
+                    if (level.type === 'intro') {
+                        // AQUÍ ARRANCAMOS LA MÚSICA
+                        btn.onclick = () => {
+                            audio.volume = 0.5; // Volumen al 50%
+                            audio.play().catch(e => console.log("Audio bloqueado hasta interacción"));
+                            nextLevel();
+                        };
+                    } else if (level.type === 'final-gift') {
+                        btn.onclick = () => location.reload();
+                    } else {
+                        btn.onclick = nextLevel;
+                    }
+                    container.appendChild(btn);
+                }
+
+                container.style.opacity = 1;
+            }, 500);
+        }
+
+        function checkAnswer() {
+            const input = document.getElementById('ans');
+            let val = input.value.toLowerCase().trim();
+            // Limpieza básica de texto
+            val = val.replace(/,/g, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            
+            const level = levels[currentLevel];
+            let answers = Array.isArray(level.answer) ? level.answer : [level.answer];
+            // Limpieza de respuestas correctas
+            answers = answers.map(a => a.toLowerCase().replace(/,/g, '').normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+
+            // Verificación
+            let correct = false;
+            // Si es coordenadas, usamos 'includes'
+            if (level.title.includes("Coordenadas")) {
+                if (val.includes("20.388") || val.includes("99.95")) correct = true;
+            } else {
+                if (answers.includes(val)) correct = true;
+            }
+
+            if (correct) {
+                // ANIMACIÓN ESPECIAL SI ES EL ROMPECABEZAS
+                if (level.type === 'blur-riddle') {
+                    const pzlCont = document.getElementById('puzzle-cont');
+                    // Al añadir esta clase, el CSS hace que las piezas se muevan a su lugar y se enfoquen
+                    pzlCont.classList.add('revealed'); 
+                    
+                    input.style.borderColor = '#00ff00';
+                    input.style.display = 'none'; // Oculta el input para que vea la animación
+                    
+                    // Esperamos 3 segundos viendo como se arma antes de cambiar
+                    setTimeout(() => nextLevel(), 3500);
+                } else {
+                    nextLevel();
+                }
+            } else {
+                input.classList.add('shake');
+                input.style.borderColor = '#ff4444';
+                setTimeout(() => input.classList.remove('shake'), 500);
+            }
+        }
+
+        function nextLevel() {
+            currentLevel++;
+            loadLevel();
+        }
+
+        // Iniciar
+        loadLevel();
+
+    </script>
+</body>
+</html>
